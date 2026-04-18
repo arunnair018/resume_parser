@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Resume</title>
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f9fafb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+    }
+
+    input[type="file"] {
+      margin: 15px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>Upload Your Resume</h2>
+
+    <input type="file" id="fileInput" accept=".pdf,.doc,.docx" />
+    <br/>
+
+    <button id="uploadBtn" disabled>Upload</button>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const message = document.getElementById('message');
+
+    let selectedFile = null;
+
+    fileInput.addEventListener('change', () => {
+      selectedFile = fileInput.files[0];
+
+      if (!selectedFile) {
+        uploadBtn.disabled = true;
+        return;
+      }
+
+      const allowedTypes = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ];
+
+      if (!allowedTypes.includes(selectedFile.type)) {
+        message.textContent = "Only PDF or DOC files allowed.";
+        message.className = "message error";
+        uploadBtn.disabled = true;
+        return;
+      }
+
+      message.textContent = "";
+      uploadBtn.disabled = false;
+    });
+
+    uploadBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+
+      uploadBtn.disabled = true;
+      message.textContent = "Uploading...";
+      message.className = "message";
+
+      try {
+        // 👇 Replace with your backend API endpoint
+        const formData = new FormData();
+        formData.append("resume", selectedFile);
+
+        // Example API call
+        /*
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData
+        });
+        */
+
+        // Simulated success
+        await new Promise(r => setTimeout(r, 1000));
+
+        message.textContent = "Upload successful!";
+        message.className = "message success";
+      } catch (err) {
+        message.textContent = "Upload failed. Try again.";
+        message.className = "message error";
+      } finally {
+        uploadBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>
