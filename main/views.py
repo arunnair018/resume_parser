@@ -5,8 +5,8 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'home.html')
 
-def upload_resume(request):
+def parsed_resume(request):
     if request.method == 'POST':
         # Handle file upload and resume parsing logic here
         pass
-    return render(request, 'upload_resume.html')
+    return render(request, 'parsed_resume.html')
